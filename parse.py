@@ -2,6 +2,7 @@ import csv
 
 import requests
 from bs4 import BeautifulSoup
+import datetime
 
 
 #Получаем данные в случае статуса кода 200
@@ -33,7 +34,9 @@ def get_fx(html):
 
 # Создаём csv файл на основе функции get_fx
 def make_csv(tables):
-    with open('fxrates.csv', "w", encoding="utf-8") as file:
+    now = datetime.datetime.now()
+    # today = datetime.date.today()
+    with open(f'fxrates{now}.csv', "w", encoding="utf-8") as file:
         writer = csv.writer(file, delimiter=';')
         """
         Добавляем верзние поля и записываем данные через for в csv файл
