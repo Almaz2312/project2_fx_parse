@@ -15,12 +15,13 @@ def get_response(url):
 
 # Записываем стягиваемые данные в таблицу
 def get_fx(html):
+    list_ = []
     table = []
     soup = BeautifulSoup(html, "html.parser")
     content = soup.find("div", class_="col-md-9")
     fxtable = content.find("table", {"id" : "rates_table"})
-    thr = fxtable.find("tbody")
-    fxdata = thr.find_all('tr')
+    # thr = fxtable.find("tbody")
+    fxdata = fxtable.find_all('tr')
     """
         Получаем данные курсов банка и названия банка из тега "tr"
         и проходимся по данным через for, а получаемый результат
@@ -29,22 +30,24 @@ def get_fx(html):
     for data in fxdata:
         lt = data.get_text(separator=";").replace(',', '.').split(';')
         table.append(lt)
+    for f in table[0]:
+        list_.append(f)
+        list_.append(f)
+    list_.remove(list_[0])
+    table.remove(table[0])
+    table.insert(0, list_)
     return table
 
 
 # Создаём csv файл на основе функции get_fx
 def make_csv(tables):
     now = datetime.datetime.now()
-    # today = datetime.date.today()
+
     with open(f'fxrates{now}.csv', "w", encoding="utf-8") as file:
         writer = csv.writer(file, delimiter=';')
         """
         Добавляем верзние поля и записываем данные через for в csv файл
         """
-        writer.writerow(['Банки', 'Покупка USD', 'Продажа USD',
-                         'Покупка EUR','Продажа EUR',
-                         'Покупка RUB', 'Продажа RUB',
-                         'Покупка KZT', 'Продажа KZT'])
         for table in tables:
             writer.writerow(table)
 
