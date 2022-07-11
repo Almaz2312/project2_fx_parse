@@ -20,7 +20,6 @@ def get_fx(html):
     soup = BeautifulSoup(html, "html.parser")
     content = soup.find("div", class_="col-md-9")
     fxtable = content.find("table", {"id" : "rates_table"})
-    # thr = fxtable.find("tbody")
     fxdata = fxtable.find_all('tr')
     """
         Получаем данные курсов банка и названия банка из тега "tr"
@@ -33,6 +32,12 @@ def get_fx(html):
     for f in table[0]:
         list_.append(f)
         list_.append(f)
+    """
+    Доавляем заголок через таблицу f и дублируем их названия.
+    Т.к нужно дублировать заголовки со второй, то здесь после записи
+    удаляется первый из списка f. После удаляется первый индекс из списка table,
+    т.к это не дублированный заголовок и вставляется дублированный заголок. 
+    """
     list_.remove(list_[0])
     table.remove(table[0])
     table.insert(0, list_)
